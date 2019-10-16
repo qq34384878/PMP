@@ -1,7 +1,16 @@
 #profile
-#spring:
-#  profiles:
-#    active: prod
+spring:
+  profiles:
+    active: test
+
+  # freemarker
+  freemarker:
+    cache: false
+    charset: UTF-8
+    suffix: .html
+    request-context-attribute: request
+    template-loader-path: classpath:/templates
+
 
 server:
   port: 8019
@@ -14,94 +23,3 @@ server:
     min-spare-threads: 30
     # 通用配置
     additional-tld-skip-patterns: jaxb-api.jar,jaxb-core.jar
-
-logging:
-  path: /srv/dubbo/pmp/logs
-  level:
-    org.springframework: INFO
-    com.fasterxml.jackson: INFO
-    com.debug.pmp: DEBUG
-
-# json序列化配置
-spring:
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
-      enabled: true
-
-  # Redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-#    password:
-
-  # freemarker
-  freemarker:
-    cache: false
-    charset: UTF-8
-    suffix: .html
-    request-context-attribute: request
-    template-loader-path: classpath:/templates
-
-  # datasource配置
-  datasource:
-    initialization-mode: never
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/pmp?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-      username: root
-      password: 123456
-
-      # 数据库连接池的配置-可以配置默认
-      initial-size: 10
-      max-active: 50
-      min-idle: 10
-      max-wait: 60000
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 30000
-
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-      filter:
-        stat:
-          log-slow-sql: true
-          slow-sql-millis: 1000
-          merge-sql: false
-        wall:
-          config:
-            multi-statement-allow: true
-  jmx:
-    enabled: false
-
-
-# mybatis
-mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.fangyu.pmp.model.entity
-
-  global-config:
-    banner: false
-
-    db-config:
-      id-type: auto
-      field-strategy: not_null
-      table-underline: true
-      logic-delete-value: 1
-      logic-not-delete-value: 0
-
-# 自定义参数
-redis:
-  config:
-    host: redis://127.0.0.1:6379
