@@ -18,4 +18,10 @@
     <!--@mbg.generated-->
     user_id, `name`, username, `password`, salt, email, mobile, `status`, dept_id, create_time
   </sql>
+    <select id="selectByUserName" resultType="com.fangyu.pmp.model.entity.SysUserEntity">
+      select
+        *
+      from sys_user
+      where username = #{userName}
+    </select>
 </mapper>

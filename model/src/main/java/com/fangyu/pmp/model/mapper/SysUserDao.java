@@ -3,8 +3,7 @@ package com.fangyu.pmp.model.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fangyu.pmp.model.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 系统用户
@@ -13,9 +12,12 @@ import java.util.List;
 @Mapper
 public interface SysUserDao extends BaseMapper<SysUserEntity> {
 
-    // 查询用户的所有权限
-    List<String> queryAllPerms(Long userId);
+    //
+    SysUserEntity selectByUserName(@Param("userName") String userName);
 
     // 查询用户的所有权限
-    List<Long> queryAllMenuId(Long userId);
+//    List<String> queryAllPerms(Long userId);
+//
+//    // 查询用户的所有权限
+//    List<Long> queryAllMenuId(Long userId);
 }

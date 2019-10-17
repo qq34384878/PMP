@@ -13,3 +13,9 @@
     1、打包成可执行的jar、war等配置
     2、SpringBoot应用的启动类
     3、整个项目/服务的核心开发逻辑所在
+
+
+### 热部署步骤
+步骤一：引入spring-boot-devtools的依赖jar
+
+步骤二：开启IDEA自动编译及automake的功能
