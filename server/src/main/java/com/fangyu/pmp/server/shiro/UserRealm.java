@@ -3,8 +3,8 @@ package com.fangyu.pmp.server.shiro;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fangyu.pmp.model.entity.SysUserEntity;
 import com.fangyu.pmp.model.mapper.SysUserDao;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -33,8 +33,8 @@ public class UserRealm extends AuthorizingRealm {
     /**
      * 资源-权限分配 ~ 授权
      *
-     * @param principalCollection
-     * @return
+     * @param principalCollection 资源收集
+     * @return 授权信息
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -44,9 +44,9 @@ public class UserRealm extends AuthorizingRealm {
     /**
      * 用户认证 ~ 登录认证
      *
-     * @param authenticationToken
-     * @return
-     * @throws AuthenticationException
+     * @param authenticationToken 身份验证token
+     * @return 身份认证信息
+     * @throws AuthenticationException 认证异常
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -54,7 +54,7 @@ public class UserRealm extends AuthorizingRealm {
         final String userName = token.getUsername();
         final String password = String.valueOf(token.getPassword());
 
-        log.info("用户名: {}, 密码: {} ", token.getUsername(), String.valueOf(token.getPassword()));
+        log.info("用户名: {}, 密码: {} ", userName, password);
 
         SysUserEntity entity = sysUserDao.selectOne(new QueryWrapper<SysUserEntity>().eq("username", userName));
 //        SysUserEntity entity = sysUserDao.selectByUserName(userName); //演示sql注入攻击
@@ -70,30 +70,32 @@ public class UserRealm extends AuthorizingRealm {
         }
         //第一种 : 明文匹配
         //账户名密码不匹配
-        if (!entity.getPassword().equals(password)){
-            throw new IncorrectCredentialsException("账户密码不匹配!");
-        }
-        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(entity,password,getName());
-
-        //第三种验证逻辑
-//        String realPassword=ShiroUtil.sha256(password,entity.getSalt());
-//        if (StringUtils.isBlank(realPassword) || !realPassword.equals(entity.getPassword())){
+//        if (!entity.getPassword().equals(password)){
 //            throw new IncorrectCredentialsException("账户密码不匹配!");
 //        }
-//        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(entity,password,getName());
+//        return new SimpleAuthenticationInfo(entity,password,getName());
+
+        //第三种验证逻辑
+        String realPassword=ShiroUtil.sha256(password,entity.getSalt());
+        if (StringUtils.isBlank(realPassword) || !realPassword.equals(entity.getPassword())){
+            throw new IncorrectCredentialsException("账户密码不匹配!");
+        }
+        return new SimpleAuthenticationInfo(entity, password,getName());
 
         //第二种验证逻辑-交给shiro的密钥匹配器去实现
-//        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(entity, password, ByteSource.Util.bytes(entity.getSalt()), getName());
-        return info;
+//        return new SimpleAuthenticationInfo(entity, entity.getPassword(), ByteSource.Util.bytes(entity.getSalt()), getName());
     }
 
     /**
-     * 密码匹配器
-     *
-     * @param credentialsMatcher
+     * 设置密码匹配器
+     * 密码验证器~匹配逻辑 ~ 第二种验证逻辑
+     * @param credentialsMatcher 凭证匹配器
      */
-    @Override
-    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-        super.setCredentialsMatcher(credentialsMatcher);
-    }
+//    @Override
+//    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+//        HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
+//        shaCredentialsMatcher.setHashAlgorithmName(ShiroUtil.hashAlgorithmName);
+//        shaCredentialsMatcher.setHashIterations(ShiroUtil.hashIterations);
+//        super.setCredentialsMatcher(credentialsMatcher);
+//    }
 }

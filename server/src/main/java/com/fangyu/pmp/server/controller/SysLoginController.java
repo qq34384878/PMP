@@ -3,7 +3,7 @@ package com.fangyu.pmp.server.controller;
 import com.fangyu.pmp.common.response.BaseResponse;
 import com.fangyu.pmp.common.response.StatusCode;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,9 +51,18 @@ public class SysLoginController extends AbstractController{
                 UsernamePasswordToken token = new UsernamePasswordToken(username, password);
                 subject.login(token);
             }
-        } catch (Exception e){
+        } catch (UnknownAccountException e){
             log.error("e ==> {}", e.getMessage());
             return new BaseResponse(StatusCode.Fail.getCode(), e.getMessage());
+        } catch (IncorrectCredentialsException e){
+            log.error("e ==> {}", e.getMessage());
+            return new BaseResponse(StatusCode.AccountPasswordNotMatch);
+        } catch (LockedAccountException e){
+            log.error("e ==> {}", e.getMessage());
+            return new BaseResponse(StatusCode.AccountHasBeenLocked);
+        } catch (AuthenticationException e){
+            log.error("e ==> {}", e.getMessage());
+            return new BaseResponse(StatusCode.AccountValidateFail);
         }
 
         return new BaseResponse(StatusCode.Success);
