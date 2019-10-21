@@ -3,7 +3,7 @@ logging:
   level:
     org.springframework: INFO
     com.fasterxml.jackson: INFO
-    com.debug.pmp: DEBUG
+    com.fangyu.pmp: DEBUG
 
 # json序列化配置
 spring:
