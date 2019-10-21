@@ -2,6 +2,7 @@ package com.fangyu.pmp.server.controller;
 
 import com.fangyu.pmp.common.response.BaseResponse;
 import com.fangyu.pmp.common.response.StatusCode;
+import com.fangyu.pmp.common.utils.PageUtil;
 import com.fangyu.pmp.server.service.SysPostService;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ public class SysPostController extends AbstractController {
         BaseResponse response = new BaseResponse(StatusCode.Success);
         Map<String, Object> resMap = Maps.newHashMap();
         try {
-            postService.queryPage(paramMap);
+            PageUtil page = postService.queryPage(paramMap);
+            resMap.put("page", page);
         } catch (Exception e){
             response = new BaseResponse(StatusCode.Fail);
         }
+        response.setData(resMap);
         return response;
     }
 

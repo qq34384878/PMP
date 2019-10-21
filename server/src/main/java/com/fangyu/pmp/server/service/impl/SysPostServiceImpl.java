@@ -3,6 +3,7 @@ package com.fangyu.pmp.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fangyu.pmp.common.utils.PageUtil;
 import com.fangyu.pmp.common.utils.QueryUtil;
 import com.fangyu.pmp.model.entity.SysPostEntity;
 import com.fangyu.pmp.model.mapper.SysPostDao;
@@ -22,7 +23,7 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostDao, SysPostEntity> i
 
     // 分页模糊查询
     @Override
-    public void queryPage(Map<String, Object> params) {
+    public PageUtil queryPage(Map<String, Object> params) {
         String search = (String) params.get("search");
 
         // 调用自封装的分页查询工具
@@ -30,9 +31,10 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostDao, SysPostEntity> i
 
         // SQL: SELECT * FROM sys_post WHERE 1=1 AND (post_code LIKE '%经理%' OR post_name LIKE '%经理%')
         QueryWrapper wrapper = new QueryWrapper<SysPostEntity>()
-                .like(StringUtils.isNotBlank(search), "post_code", search)
+                .like(StringUtils.isNotBlank(search), "post_code", search.trim())
                 .or(StringUtils.isNotBlank(search))
-                .like(StringUtils.isNotBlank(search), "post_name", search);
+                .like(StringUtils.isNotBlank(search), "post_name", search.trim());
         IPage<SysPostEntity> resPage = this.page(queryPage, wrapper);
+        return new PageUtil(resPage);
     }
 }

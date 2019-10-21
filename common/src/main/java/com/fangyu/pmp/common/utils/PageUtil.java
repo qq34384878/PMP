@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 统一封装的分页工具类：也可以指定 long类型；但是一般int就够用了 ~ 根据具体的业务情况而定！
+ *
  * @author fangyu
  * @version v1.0.0
  * @since 2019/10/21 9:57 下午
@@ -36,24 +37,26 @@ public class PageUtil implements Serializable {
 
     /**
      * 分页
-     * @param totalCount    总记录数
-     * @param pageSize      每页记录数
-     * @param currPage      当前页数
-     * @param list          列表数据
+     *
+     * @param totalCount 总记录数
+     * @param pageSize   每页记录数
+     * @param currPage   当前页数
+     * @param list       列表数据
      */
     public PageUtil(int totalCount, int pageSize, int currPage, List<?> list) {
         this.totalCount = totalCount;
         this.pageSize = pageSize;
-        this.totalPage = (int) Math.ceil((double)totalCount/pageSize);
+        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
         this.currPage = currPage;
         this.list = list;
     }
 
     /**
      * 分页
+     *
      * @param page IPage对象
      */
-    public PageUtil(IPage<?> page){
+    public PageUtil(IPage<?> page) {
         this.totalCount = (int) page.getTotal();
         this.pageSize = (int) page.getSize();
         this.totalPage = (int) page.getPages();
