@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -136,5 +137,17 @@ public class SysLoginController extends AbstractController {
         }
 
         return new BaseResponse(StatusCode.Success);
+    }
+
+
+    /**
+     * 退出登录
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(){
+        // 销毁当前shiro的用户的session
+        ShiroUtil.logout();
+        return "redirect:/login.html";
     }
 }
