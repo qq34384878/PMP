@@ -98,10 +98,10 @@ public class SysLoginController extends AbstractController {
         log.info("用户名：{} 密码：{} 验证码：{}", username, password, captcha);
 
         // 校验验证码
-        String kaptcha = ShiroUtil.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-        if (!kaptcha.equals(captcha)){
-            return new BaseResponse(StatusCode.InvalidCode);
-        }
+//        String kaptcha = ShiroUtil.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+//        if (!kaptcha.equals(captcha)){
+//            return new BaseResponse(StatusCode.InvalidCode);
+//        }
 
         try {
 //            From http://shiro.apache.org  文档

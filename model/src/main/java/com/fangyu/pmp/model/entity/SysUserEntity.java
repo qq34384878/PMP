@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fangyu on 2019/10/17.
@@ -70,6 +71,19 @@ public class SysUserEntity {
      */
     @TableField(value = "create_time")
     private Date createTime;
+
+    //@TableField：字段属性不为数据库表字段，但又是必须使用的
+    @TableField(exist=false)
+    private List<Long> roleIdList;
+
+    @TableField(exist=false)
+    private String deptName;
+
+    @TableField(exist=false)
+    private List<Long> postIdList;
+
+    @TableField(exist=false)
+    private String postName;
 
     public static final String COL_USER_ID = "user_id";
 
