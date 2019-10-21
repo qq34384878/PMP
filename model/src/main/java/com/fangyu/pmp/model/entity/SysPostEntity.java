@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
@@ -24,12 +25,14 @@ public class SysPostEntity {
     /**
      * 岗位编码
      */
+    @NotBlank(message = "岗位编码不能为空!")
     @TableField(value = "post_code")
     private String postCode;
 
     /**
      * 岗位名称
      */
+    @NotBlank(message = "岗位名称不能为空!")
     @TableField(value = "post_name")
     private String postName;
 

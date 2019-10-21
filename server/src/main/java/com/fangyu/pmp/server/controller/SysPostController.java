@@ -3,12 +3,16 @@ package com.fangyu.pmp.server.controller;
 import com.fangyu.pmp.common.response.BaseResponse;
 import com.fangyu.pmp.common.response.StatusCode;
 import com.fangyu.pmp.common.utils.PageUtil;
+import com.fangyu.pmp.common.utils.ValidatorUtil;
+import com.fangyu.pmp.model.entity.SysPostEntity;
 import com.fangyu.pmp.server.service.SysPostService;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -32,10 +36,25 @@ public class SysPostController extends AbstractController {
         try {
             PageUtil page = postService.queryPage(paramMap);
             resMap.put("page", page);
-        } catch (Exception e){
+        } catch (Exception e) {
             response = new BaseResponse(StatusCode.Fail);
         }
         response.setData(resMap);
+        return response;
+    }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BaseResponse save(@RequestBody @Validated SysPostEntity entity, BindingResult result) {
+        String res = ValidatorUtil.checkResult(result);
+        if (StringUtils.isNotBlank(res)){
+            return new BaseResponse(StatusCode.InvalidParams.getCode(), res);
+        }
+        BaseResponse response = new BaseResponse(StatusCode.Success);
+        try {
+            postService.savePost(entity);
+        } catch (Exception e) {
+            response = new BaseResponse(StatusCode.Fail.getCode(), e.getMessage());
+        }
         return response;
     }
 
