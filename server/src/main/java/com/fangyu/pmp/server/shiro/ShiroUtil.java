@@ -58,10 +58,15 @@ public class ShiroUtil {
         SecurityUtils.getSubject().logout();
     }
 
+    /**
+     * 获取验证码
+     * @param key
+     * @return
+     */
     public static String getKaptcha(String key){
         Object kaptcha = getSessionAttribute(key);
         if (kaptcha == null) {
-            throw new CommonException("验证码已失效");
+            throw new CommonException("验证码已失效！");
         }
         String newCode = kaptcha.toString();
         getSession().removeAttribute(key);
